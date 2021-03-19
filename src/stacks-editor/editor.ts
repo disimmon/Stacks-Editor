@@ -335,7 +335,7 @@ export class StacksEditor implements View {
 </div>`;
 
         const container = document.createElement("div");
-        container.className = "grid--cell grid ai-center ml24 fc-medium";    
+        container.className = "grid--cell grid ai-center ml24 fc-medium";
         container.innerHTML = html;
         container.title = "Toggle Markdown editing";
 
