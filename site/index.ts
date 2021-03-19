@@ -138,12 +138,8 @@ domReady(() => {
             defaultView: getDefaultEditor(),
             editorHelpLink: "#TODO",
             classOverrides: {
-                // Button / Dropdown specific //
                 menuClassList: ['columns'],
                 pluginClassList: [],
-                // Editor Switch - probably just client side handle this
-                editorSwitchClassList: ['column', 'is-flex', 'has-flex-justify-content-end'],
-                editorSwitchHtml: toggleHTML
             },
             commonmarkOptions: {
                 // reset to base styles markdown

@@ -11,13 +11,6 @@ import type { Node as ProseMirrorNode } from "prosemirror-model";
 import { EditorView } from "prosemirror-view";
 import { toggleReadonly } from "../shared/prosemirror-plugins/readonly";
 
-/* 
-    DS - main editor UI
-    Thoughts:
-        - main css config for overriding classnames
-        - not a ton to do here, but try to be friendly to current style baselines
-*/
-
 //NOTE relies on Stacks classes. Should we separate out so the editor is more agnostic?
 
 /** Describes each distinct editor type the StacksEditor handles */
@@ -48,15 +41,10 @@ export interface StacksEditorOptions extends CommonViewOptions {
  * A full list of our UI overrides classes and structures for editors / menu buttons / etc
  */
 interface classOverrides {
-    /** The list of classes added to each Menu Button */
-    menuButtonClassList?: string[];
     // Plugin Holder //
     pluginClassList?: string[];
     // Menu Holder //
     menuClassList?: string[];
-    // Markdown Editor Switch - This can be handled in the client //
-    editorSwitchClassList?: string[];
-    editorSwitchHtml?: string;
 }
 
 /**
