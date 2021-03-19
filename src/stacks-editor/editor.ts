@@ -223,7 +223,6 @@ export class StacksEditor implements View {
      * plugins to render their content in a reliable manner. This area cancels mousedown events to keep the editor
      * from blurring and also handles sticking the content to the top of the editor on scroll.
      */
-    // DS - need configurable classes
     private setupPluginContainer() {
         // create an area where plugins can be placed
         this.pluginContainer = document.createElement("div");
@@ -310,7 +309,6 @@ export class StacksEditor implements View {
         }
 
         // set up focus/blur listeners so we can style the dom to match
-        // DS - focus styles... maybe fine here
         this.backingView.editorView.props.handleDOMEvents = {
             focus: () => {
                 this.innerTarget.classList.add("bs-ring", "bc-blue-300");
@@ -335,7 +333,6 @@ export class StacksEditor implements View {
      * @param defaultItem The type that is set as the default
      * @param menuTarget The container to append the created element to
      */
-    // DS - redo Markup TOGGLE - We can do this at the client
     private createEditorSwitcher(defaultItem: EditorType, menuTarget: Element, classList?: string[], toggleMarkup?: string) {
         const checkedProp =
             defaultItem === EditorType.Commonmark ? "checked" : "";
@@ -352,10 +349,8 @@ export class StacksEditor implements View {
         `;
 
         const container = document.createElement("div");
-        const editorToggleClassList = classList || ['grid--cell', 'grid', 'ai-center', 'ml24', 'fc-medium'];
-        container.classList.add(...editorToggleClassList);
-        
-        container.innerHTML = toggleMarkup.replace(/{{id}}/g, this.internalId) || html;
+        container.className = "grid--cell grid ai-center ml24 fc-medium";        
+        container.innerHTML = html;
         container.title = "Toggle Markdown editing";
 
         container

@@ -87,7 +87,7 @@ class MenuView implements PluginView {
         this.dom.classList.toggle("pe-none", this.readonly);
 
         const viewIsReadonly = this.readonly;
-        const activeClass = "is-active";
+        const activeClass = "is-selected";
         const invisibleClass = "d-none";
         const disabledClass = MenuView.disabledClass;
 
@@ -161,8 +161,7 @@ export interface MenuCommandEntry {
 
     // if this menu entry is a dropdown menu, it will have child items containing the actual commands
     children?: MenuCommandEntry[];
-
-    // DS - can we do this
+    // custom classes
     classList?: string[]
 }
 
@@ -237,21 +236,11 @@ export function makeMenuIcon(
     button.dataset.key = key;
     button.type = "button";
 
-    // // create the svg icon-bg element
-    // const icon = document.createElement("span");
-    // icon.className = "icon-bg icon" + iconName;
+    // create the svg icon-bg element
+    const icon = document.createElement("span");
+    icon.className = "icon-bg icon" + iconName;
 
-    // button.append(icon);
-
-    // DS - Docs way : What's a happy medium here?
-    const content = `		
-    <span class="visually-hidden">${title}</span>
-    <span class="icon">
-        <span class="docon docon-like ${iconName}" aria-hidden="true"></span>
-    </span>
-    `
-
-    button.innerHTML = content;
+    button.append(icon);
 
     return button;
 }
@@ -264,7 +253,7 @@ export function makeMenuSpacerEntry(
     cssClasses?: string[]
 ): MenuCommandEntry {
     const dom = document.createElement("div");
-    //DS - dom.className = "grid--cell w16";
+    dom.className = "grid--cell w16";
 
     if (cssClasses) {
         dom.classList.add(...cssClasses);
@@ -287,7 +276,6 @@ export function makeMenuSpacerEntry(
  * @param visible A function that determines wether the dropdown should be visible or hidden
  * @param children The child MenuComandEntry items to be placed in the dropdown menu
  */
-// DS - work with this? Class overrides?
 export function makeMenuDropdown(
     svg: string,
     title: string,
@@ -339,7 +327,6 @@ export function makeMenuDropdown(
  * @param command The command to be executed when this item is clicked
  * @param key A unique identifier used for identifying the command to be executed on click
  */
-// DS - ClassList override
 export function dropdownItem(
     title: string,
     command: MenuCommand,
@@ -364,7 +351,6 @@ export function dropdownItem(
  * @param title The text to be displayed for this item
  * @param key A unique identifier used for identifying the command to be executed on click
  */
-// DS - ClassList override
 export function dropdownSection(title: string, key: string): MenuCommandEntry {
     const section = document.createElement("span");
     section.className = `grid--cell ta-left fs-fine tt-uppercase mx12 mb6 mt12 fc-black-400`;
@@ -386,7 +372,6 @@ export function dropdownSection(title: string, key: string): MenuCommandEntry {
  * @param title The text to place in the link's title attribute
  * @param href The href to open when clicked
  */
-// DS - ClassList override
 export function makeMenuLinkEntry(
     iconName: string,
     title: string,

@@ -670,7 +670,6 @@ export function insertImageCommand(
     return true;
 }
 
-// DS - UI
 export const createMenu = (options: CommonViewOptions): Plugin =>
     createMenuPlugin(
         [

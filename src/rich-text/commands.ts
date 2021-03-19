@@ -590,7 +590,6 @@ function markActive(mark: MarkType) {
     };
 }
 
-// DS - UI
 export const createMenu = (options: CommonViewOptions): Plugin =>
     createMenuPlugin(
         [
