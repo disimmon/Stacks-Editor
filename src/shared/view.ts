@@ -29,8 +29,10 @@ export interface CommonViewOptions {
     imageUpload?: ImageUploadOptions;
     /** Externally written plugins to add to the editor */
     externalPlugins?: ExternalEditorPlugin[];
-    /** Menu container classes */
-    menuClassList?: string[];
+    /** Button container classes */
+    buttonContainerClassList?: string[];
+    /** Individual button classes */
+    buttonClassList?: string[];
 }
 
 /** Configuration options for parsing and rendering [tag:*] and [meta-tag:*] syntax */

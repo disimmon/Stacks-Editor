@@ -40,26 +40,21 @@ export interface StacksEditorOptions extends CommonViewOptions {
     /** The specific options to pass to the RichTextEditor; overrides any values on the parent options */
     richTextOptions?: RichTextOptions;
     /** Interface Overrides */
-    interfaceOverrides?: InterfaceOverrides;
+    classOverrides?: classOverrides;
 }
 
 /**
  * DS -
  * A full list of our UI overrides classes and structures for editors / menu buttons / etc
  */
-interface InterfaceOverrides {
-    // Button / Dropdown specific //
-    /** ClassName given to selected elements */
-    selectedClassName?: string;
-    /** ClassName given to hidden elements */
-    hiddenClassName?: string;
+interface classOverrides {
     /** The list of classes added to each Menu Button */
-    buttonClassList?: string[];
+    menuButtonClassList?: string[];
     // Plugin Holder //
     pluginClassList?: string[];
     // Menu Holder //
     menuClassList?: string[];
-    // Markdown Editor Switch //
+    // Markdown Editor Switch - This can be handled in the client //
     editorSwitchClassList?: string[];
     editorSwitchHtml?: string;
 }
@@ -234,13 +229,13 @@ export class StacksEditor implements View {
         this.pluginContainer = document.createElement("div");
         this.pluginContainer.className = `s-editor-shadow js-plugin-container ${STICKY_OBSERVER_CLASS}`;
         // Look for visual override classes otherwise use defaults
-        const pluginClassList = this.options.interfaceOverrides.pluginClassList || ['py6','bg-inherit','btr-sm','w100','ps-sticky','t0','l0','z-nav'];
+        const pluginClassList = this.options.classOverrides.pluginClassList || ['py6','bg-inherit','btr-sm','w100','ps-sticky','t0','l0','z-nav'];
         this.pluginContainer.classList.add(...pluginClassList);
 
         // create specific area for the editor menu
         const menuTarget = document.createElement("div");
         // Look for visual override classes otherwise use defaults
-        const menuClassList = this.options.interfaceOverrides.menuClassList || ['grid','overflow-x-auto','ai-center','px12','py4','pb0'];
+        const menuClassList = this.options.classOverrides.menuClassList || ['grid','overflow-x-auto','ai-center','px12','py4','pb0'];
         menuTarget.classList.add(...menuClassList);
         this.pluginContainer.appendChild(menuTarget);
 
@@ -257,7 +252,7 @@ export class StacksEditor implements View {
 
         this.innerTarget.appendChild(this.pluginContainer);
 
-        this.createEditorSwitcher(this.options.defaultView, menuTarget, this.options.interfaceOverrides.editorSwitchClassList, this.options.interfaceOverrides.editorSwitchHtml);
+        this.createEditorSwitcher(this.options.defaultView, menuTarget, this.options.classOverrides.editorSwitchClassList, this.options.classOverrides.editorSwitchHtml);
 
         // Call `preventDefault` on all `mousedown` events in our plugin container so that the Editor
         // itself does not blur on e.g. button clicks. This does not affect other mouse events / bubbling
@@ -340,7 +335,7 @@ export class StacksEditor implements View {
      * @param defaultItem The type that is set as the default
      * @param menuTarget The container to append the created element to
      */
-    // DS - redo Markup TOGGLE
+    // DS - redo Markup TOGGLE - We can do this at the client
     private createEditorSwitcher(defaultItem: EditorType, menuTarget: Element, classList?: string[], toggleMarkup?: string) {
         const checkedProp =
             defaultItem === EditorType.Commonmark ? "checked" : "";

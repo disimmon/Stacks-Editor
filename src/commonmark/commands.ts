@@ -677,28 +677,28 @@ export const createMenu = (options: CommonViewOptions): Plugin =>
             {
                 key: "toggleHeading",
                 command: headerCommand,
-                dom: makeMenuIcon("Header", "Heading", "heading-btn"),
+                dom: makeMenuIcon("Header", "Heading", "heading-btn", options.buttonClassList),
             },
             {
                 key: "togglBold",
                 command: boldCommand,
-                dom: makeMenuIcon("Bold", "Bold", "bold-btn"),
+                dom: makeMenuIcon("Bold", "Bold", "bold-btn", options.buttonClassList),
             },
             {
                 key: "toggleEmphasis",
                 command: emphasisCommand,
-                dom: makeMenuIcon("Italic", "Italic", "italic-btn"),
+                dom: makeMenuIcon("Italic", "Italic", "italic-btn", options.buttonClassList),
             },
             {
                 key: "toggleCode",
                 command: inlineCodeCommand,
-                dom: makeMenuIcon("Code", "Inline code", "code-btn"),
+                dom: makeMenuIcon("Code", "Inline code", "code-btn", options.buttonClassList),
             },
             addIf(
                 {
                     key: "toggleStrikethrough",
                     command: strikethroughCommand,
-                    dom: makeMenuIcon("Strikethrough", "Strikethrough", "strike-btn"),
+                    dom: makeMenuIcon("Strikethrough", "Strikethrough", "strike-btn", options.buttonClassList),
                 },
                 options.parserFeatures.extraEmphasis
             ),
@@ -706,12 +706,12 @@ export const createMenu = (options: CommonViewOptions): Plugin =>
             {
                 key: "toggleLink",
                 command: insertLinkCommand,
-                dom: makeMenuIcon("Link", "Insert link", "insert-link-btn"),
+                dom: makeMenuIcon("Link", "Insert link", "insert-link-btn", options.buttonClassList),
             },
             {
                 key: "toggleBlockquote",
                 command: blockquoteCommand,
-                dom: makeMenuIcon("Quote", "Blockquote", "blockquote-btn"),
+                dom: makeMenuIcon("Quote", "Blockquote", "blockquote-btn", options.buttonClassList),
             },
             {
                 key: "insertCodeblock",
@@ -719,7 +719,8 @@ export const createMenu = (options: CommonViewOptions): Plugin =>
                 dom: makeMenuIcon(
                     "Codeblock",
                     "Insert code block",
-                    "code-block-btn"
+                    "code-block-btn",
+                    options.buttonClassList
                 ),
             },
             addIf(
@@ -729,7 +730,8 @@ export const createMenu = (options: CommonViewOptions): Plugin =>
                     dom: makeMenuIcon(
                         "Image",
                         "Insert image",
-                        "insert-image-btn"
+                        "insert-image-btn",
+                        options.buttonClassList
                     ),
                 },
                 !!options.imageUpload?.handler
@@ -741,7 +743,8 @@ export const createMenu = (options: CommonViewOptions): Plugin =>
                     dom: makeMenuIcon(
                         "Table",
                         "Insert table",
-                        "insert-table-btn"
+                        "insert-table-btn",
+                        options.buttonClassList
                     ),
                 },
                 options.parserFeatures.tables
@@ -753,7 +756,8 @@ export const createMenu = (options: CommonViewOptions): Plugin =>
                 dom: makeMenuIcon(
                     "OrderedList",
                     "Numbered list",
-                    "numbered-list-btn"
+                    "numbered-list-btn",
+                    options.buttonClassList
                 ),
             },
             {
@@ -762,7 +766,8 @@ export const createMenu = (options: CommonViewOptions): Plugin =>
                 dom: makeMenuIcon(
                     "UnorderedList",
                     "Bulleted list",
-                    "bullet-list-btn"
+                    "bullet-list-btn",
+                    options.buttonClassList
                 ),
             },
             {
@@ -771,24 +776,31 @@ export const createMenu = (options: CommonViewOptions): Plugin =>
                 dom: makeMenuIcon(
                     "HorizontalRule",
                     "Insert Horizontal rule",
-                    "horizontal-rule-btn"
+                    "horizontal-rule-btn",
+                    options.buttonClassList
                 ),
             },
             makeMenuSpacerEntry(() => false, ["sm:d-inline-block"]),
             {
                 key: "undo",
                 command: undo,
-                dom: makeMenuIcon("Undo", "Undo", "undo-btn", [
-                    "sm:d-inline-block",
-                ]),
+                dom: makeMenuIcon(
+                "Undo",
+                "Undo",
+                "undo-btn",
+                options.buttonClassList.concat(["sm:d-inline-block"])
+                ),
                 visible: () => false,
             },
             {
                 key: "redo",
                 command: redo,
-                dom: makeMenuIcon("Refresh", "Redo", "redo-btn", [
-                    "sm:d-inline-block",
-                ]),
+                dom: makeMenuIcon(
+                "Refresh",
+                "Redo",
+                "redo-btn",
+                options.buttonClassList.concat(["sm:d-inline-block"])
+                ),
                 visible: () => false,
             },
             makeMenuSpacerEntry(),
@@ -796,5 +808,5 @@ export const createMenu = (options: CommonViewOptions): Plugin =>
             makeMenuLinkEntry("Help", "Help", options.editorHelpLink),
         ],
         options.menuParentContainer,
-        options.menuClassList
+        options.buttonContainerClassList
     );

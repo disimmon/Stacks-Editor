@@ -3,8 +3,6 @@ import { EditorView } from "prosemirror-view";
 import type { PluginView } from "./view";
 import { docChanged } from "./utils";
 
-// DS - KEY UI File
-
 /** NoOp to use in place of missing commands */
 const commandNoOp = () => false;
 
@@ -18,7 +16,7 @@ class MenuView implements PluginView {
 
     static disabledClass = "is-disabled";
 
-    constructor(items: MenuCommandEntry[], view: EditorView, classList?: string[], menuOverrides?: string[]) {
+    constructor(items: MenuCommandEntry[], view: EditorView, classList?: string[]) {
         this.items = items;
         this.view = view;
         this.classList = classList || ['grid', 'gs2', 'mln4', 'fl1', 'ai-center']; 
@@ -36,8 +34,9 @@ class MenuView implements PluginView {
 
         this.dom = document.createElement("div");
 
-        this.dom.className = `js-editor-menu`; // DS - Removal
-        this.dom.classList.add(...this.classList);
+        this.dom.className = `js-editor-menu`;
+        const menuClassList = this.classList || ['grid', 'gs2', 'mln4', 'fl1', 'ai-center'];
+        this.dom.classList.add(...menuClassList);
 
         this.items.forEach(({ dom }) => this.dom.appendChild(dom));
 
@@ -88,8 +87,7 @@ class MenuView implements PluginView {
         this.dom.classList.toggle("pe-none", this.readonly);
 
         const viewIsReadonly = this.readonly;
-        // DS - Added
-        const activeClass = "is-primary";
+        const activeClass = "is-active";
         const invisibleClass = "d-none";
         const disabledClass = MenuView.disabledClass;
 

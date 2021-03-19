@@ -597,25 +597,25 @@ export const createMenu = (options: CommonViewOptions): Plugin =>
             {
                 key: "toggleHeading",
                 command: toggleBlockType(schema.nodes.heading, { level: 1 }),
-                dom: makeMenuIcon("Header", "Heading", "heading-btn", ["button"]),
+                dom: makeMenuIcon("Header", "Heading", "heading-btn", options.buttonClassList),
                 active: nodeTypeActive(schema.nodes.heading),
             },
             {
                 key: "toggleBold",
                 command: toggleMark(schema.marks.strong),
-                dom: makeMenuIcon("Bold", "Bold", "bold-btn", ["button"]),
+                dom: makeMenuIcon("Bold", "Bold", "bold-btn", options.buttonClassList),
                 active: markActive(schema.marks.strong),
             },
             {
                 key: "toggleEmphasis",
                 command: toggleMark(schema.marks.em),
-                dom: makeMenuIcon("Italic", "Italic", "italic-btn", ["button"]),
+                dom: makeMenuIcon("Italic", "Italic", "italic-btn", options.buttonClassList),
                 active: markActive(schema.marks.em),
             },
             {
                 key: "toggleCode",
                 command: toggleMark(schema.marks.code),
-                dom: makeMenuIcon("Code", "Inline code", "code-btn", ["button"]),
+                dom: makeMenuIcon("Code", "Inline code", "code-btn", options.buttonClassList),
                 active: markActive(schema.marks.code),
             },
             addIf(
@@ -626,7 +626,7 @@ export const createMenu = (options: CommonViewOptions): Plugin =>
                         "Strikethrough",
                         "Strikethrough",
                         "strike-btn",
-                        ["button"]
+                        options.buttonClassList
                     ),
                     active: markActive(schema.marks.strike),
                 },
@@ -636,18 +636,18 @@ export const createMenu = (options: CommonViewOptions): Plugin =>
             {
                 key: "toggleLink",
                 command: insertLinkCommand,
-                dom: makeMenuIcon("Link", "Link selection", "insert-link-btn", ["button"]),
+                dom: makeMenuIcon("Link", "Link selection", "insert-link-btn", options.buttonClassList),
             },
             {
                 key: "toggleBlockquote",
                 command: toggleWrapIn(schema.nodes.blockquote),
-                dom: makeMenuIcon("Quote", "Blockquote", "blockquote-btn", ["button"]),
+                dom: makeMenuIcon("Quote", "Blockquote", "blockquote-btn", options.buttonClassList),
                 active: nodeTypeActive(schema.nodes.blockquote),
             },
             {
                 key: "toggleCodeblock",
                 command: toggleBlockType(schema.nodes.code_block),
-                dom: makeMenuIcon("Codeblock", "Code block", "code-block-btn", ["button"]),
+                dom: makeMenuIcon("Codeblock", "Code block", "code-block-btn", options.buttonClassList),
                 active: nodeTypeActive(schema.nodes.code_block),
             },
             addIf(
@@ -658,7 +658,7 @@ export const createMenu = (options: CommonViewOptions): Plugin =>
                         "Image",
                         "Image",
                         "insert-image-btn",
-                        ["button"]
+                        options.buttonClassList
                     ),
                 },
                 !!options.imageUpload?.handler
@@ -670,7 +670,8 @@ export const createMenu = (options: CommonViewOptions): Plugin =>
                     dom: makeMenuIcon(
                         "Table",
                         "Table",
-                        "insert-table-btn"
+                        "insert-table-btn",
+                        options.buttonClassList
                     ),
                     visible: (state: EditorState) => !inTable(state.selection),
                 },
@@ -684,8 +685,9 @@ export const createMenu = (options: CommonViewOptions): Plugin =>
                 dom: makeMenuIcon(
                     "OrderedList",
                     "Numbered list",
-                    "numbered-list-btn"
-                , ["button"]),
+                    "numbered-list-btn",
+                    options.buttonClassList
+                ),
                 active: nodeTypeActive(schema.nodes.ordered_list),
             },
             {
@@ -695,7 +697,7 @@ export const createMenu = (options: CommonViewOptions): Plugin =>
                     "UnorderedList",
                     "Bulleted list",
                     "bullet-list-btn",
-                    ["button"]
+                    options.buttonClassList
                 ),
                 active: nodeTypeActive(schema.nodes.bullet_list),
             },
@@ -706,7 +708,7 @@ export const createMenu = (options: CommonViewOptions): Plugin =>
                     "HorizontalRule",
                     "Horizontal rule",
                     "horizontal-rule-btn",
-                    ["button"]
+                    options.buttonClassList
                 ),
             },
             //DS - Remove
@@ -714,13 +716,13 @@ export const createMenu = (options: CommonViewOptions): Plugin =>
             {
                 key: "undo",
                 command: undo,
-                dom: makeMenuIcon("Undo", "Undo", "undo-btn", ["button"]),
+                dom: makeMenuIcon("Undo", "Undo", "undo-btn", options.buttonClassList),
                 visible: () => false,
             },
             {
                 key: "redo",
                 command: redo,
-                dom: makeMenuIcon("Refresh", "Redo", "redo-btn", ["button"]),
+                dom: makeMenuIcon("Refresh", "Redo", "redo-btn", options.buttonClassList),
                 visible: () => false,
             },
             makeMenuSpacerEntry(),
@@ -728,7 +730,7 @@ export const createMenu = (options: CommonViewOptions): Plugin =>
             makeMenuLinkEntry("Help", "Help", options.editorHelpLink),
         ],
         options.menuParentContainer,
-        options.menuClassList
+        options.buttonContainerClassList
     );
 
 const tableDropdown = makeMenuDropdown(

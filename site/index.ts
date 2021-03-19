@@ -137,26 +137,26 @@ domReady(() => {
         const editorInstance = new StacksEditor(place, content.value, {
             defaultView: getDefaultEditor(),
             editorHelpLink: "#TODO",
-            interfaceOverrides: {
+            classOverrides: {
                 // Button / Dropdown specific //
-                selectedClassName: 'is-primary',
-                hiddenClassName: 'is-hidden',
-                buttonClassList: ['button'],
-                pluginClassList: [],
                 menuClassList: ['columns'],
+                pluginClassList: [],
+                // Editor Switch - probably just client side handle this
                 editorSwitchClassList: ['column', 'is-flex', 'has-flex-justify-content-end'],
                 editorSwitchHtml: toggleHTML
             },
             commonmarkOptions: {
                 // reset to base styles markdown
                 classList: ['s-prose', 'js-editor', 'ProseMirror'],
-                menuClassList: ['buttons', 'has-addons']
+                buttonContainerClassList: ['buttons', 'has-addons'],
+                buttonClassList: ['button']
             },
             richTextOptions: {
                 linkPreviewProviders: [ExampleLinkPreviewProvider],
                 // reset to base styles richtext, add content and padding
                 classList: ['s-prose', 'js-editor', 'ProseMirror', 'content', 'has-padding-medium'],
-                menuClassList: ['buttons', 'has-addons']
+                buttonContainerClassList: ['buttons', 'has-addons'],
+                buttonClassList: ['button']
             },
             // reset to base styles editor container add identifier
             classList: ['s-editor-resizable', 'docs-editor'],
