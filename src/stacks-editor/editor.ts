@@ -239,7 +239,7 @@ export class StacksEditor implements View {
 
         this.innerTarget.appendChild(this.pluginContainer);
 
-        this.createEditorSwitcher(this.options.defaultView, menuTarget, this.options.classOverrides.editorSwitchClassList, this.options.classOverrides.editorSwitchHtml);
+        this.createEditorSwitcher(this.options.defaultView, menuTarget);
 
         // Call `preventDefault` on all `mousedown` events in our plugin container so that the Editor
         // itself does not blur on e.g. button clicks. This does not affect other mouse events / bubbling
@@ -321,23 +321,21 @@ export class StacksEditor implements View {
      * @param defaultItem The type that is set as the default
      * @param menuTarget The container to append the created element to
      */
-    private createEditorSwitcher(defaultItem: EditorType, menuTarget: Element, classList?: string[], toggleMarkup?: string) {
+    private createEditorSwitcher(defaultItem: EditorType, menuTarget: Element) {
         const checkedProp =
             defaultItem === EditorType.Commonmark ? "checked" : "";
         // TODO localization
-        const html = `
-            <label class="grid--cell fs-caption mr4 sm:d-none" for="js-editor-toggle-${this.internalId}">Markdown</label>
-            <label class="grid--cell mr4 d-none sm:d-block" for="js-editor-toggle-${this.internalId}">
-                <span class="icon-bg iconMarkdown"></span>
-            </label>
-            <div class="grid--cell s-editor-toggle js-editor-mode-switcher">
-                <input class="js-editor-toggle-state" id="js-editor-toggle-${this.internalId}" type="checkbox" ${checkedProp}/>
-                <label for="js-editor-toggle-${this.internalId}"></label>
-            </div>
-        `;
+        const html = `<label class="grid--cell fs-caption mr4 sm:d-none" for="js-editor-toggle-${this.internalId}">Markdown</label>
+<label class="grid--cell mr4 d-none sm:d-block" for="js-editor-toggle-${this.internalId}">
+    <span class="icon-bg iconMarkdown"></span>
+</label>
+<div class="grid--cell s-editor-toggle js-editor-mode-switcher">
+    <input class="js-editor-toggle-state" id="js-editor-toggle-${this.internalId}" type="checkbox" ${checkedProp}/>
+    <label for="js-editor-toggle-${this.internalId}"></label>
+</div>`;
 
         const container = document.createElement("div");
-        container.className = "grid--cell grid ai-center ml24 fc-medium";        
+        container.className = "grid--cell grid ai-center ml24 fc-medium";    
         container.innerHTML = html;
         container.title = "Toggle Markdown editing";
 
