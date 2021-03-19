@@ -117,12 +117,49 @@ domReady(() => {
         imageUploadOptions["handler"] = null;
     }
 
+    // <label class="" for="js-editor-toggle-{{id}}">Use Markdown Editor</label>
+    // <div class="s-editor-toggle js-editor-mode-switcher">
+    //     <input class="js-editor-toggle-state" id="js-editor-toggle-{{id}}" type="checkbox" />
+    //     <label for="js-editor-toggle-{{id}}"></label>
+    // </div>
+
+    // ugly
+    const toggleHTML = `
+        <label class="checkbox is-small">
+            <input type="checkbox" id="js-editor-toggle-{{id}}">
+            <span class="checkbox-check" aria-hidden="true"></span>
+            <span class="checkbox-text">Use Markdown Editor</span>
+        </label>
+    `;
+
     // asynchronously load the required bundles
     void import("../src/index").then(function ({ StacksEditor }) {
         const editorInstance = new StacksEditor(place, content.value, {
             defaultView: getDefaultEditor(),
             editorHelpLink: "#TODO",
-            commonmarkOptions: {},
+            interfaceOverrides: {
+                // Button / Dropdown specific //
+                selectedClassName: 'is-primary',
+                hiddenClassName: 'is-hidden',
+                buttonClassList: ['button'],
+                pluginClassList: [],
+                menuClassList: ['columns'],
+                editorSwitchClassList: ['column', 'is-flex', 'has-flex-justify-content-end'],
+                editorSwitchHtml: toggleHTML
+            },
+            commonmarkOptions: {
+                // reset to base styles markdown
+                classList: ['s-prose', 'js-editor', 'ProseMirror'],
+                menuClassList: ['buttons', 'has-addons']
+            },
+            richTextOptions: {
+                linkPreviewProviders: [ExampleLinkPreviewProvider],
+                // reset to base styles richtext, add content and padding
+                classList: ['s-prose', 'js-editor', 'ProseMirror', 'content', 'has-padding-medium'],
+                menuClassList: ['buttons', 'has-addons']
+            },
+            // reset to base styles editor container add identifier
+            classList: ['s-editor-resizable', 'docs-editor'],
             parserFeatures: {
                 tables: enableTables,
                 tagLinks: {
@@ -139,9 +176,7 @@ domReady(() => {
                         };
                     },
                 },
-            },
-            richTextOptions: {
-                linkPreviewProviders: [ExampleLinkPreviewProvider],
+                snippets: false
             },
             imageUpload: imageUploadOptions,
             externalPlugins: [StackSnippetsPlugin],

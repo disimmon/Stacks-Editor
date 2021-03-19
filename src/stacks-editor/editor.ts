@@ -11,6 +11,13 @@ import type { Node as ProseMirrorNode } from "prosemirror-model";
 import { EditorView } from "prosemirror-view";
 import { toggleReadonly } from "../shared/prosemirror-plugins/readonly";
 
+/* 
+    DS - main editor UI
+    Thoughts:
+        - main css config for overriding classnames
+        - not a ton to do here, but try to be friendly to current style baselines
+*/
+
 //NOTE relies on Stacks classes. Should we separate out so the editor is more agnostic?
 
 /** Describes each distinct editor type the StacksEditor handles */
@@ -32,6 +39,29 @@ export interface StacksEditorOptions extends CommonViewOptions {
     commonmarkOptions?: CommonmarkOptions;
     /** The specific options to pass to the RichTextEditor; overrides any values on the parent options */
     richTextOptions?: RichTextOptions;
+    /** Interface Overrides */
+    interfaceOverrides?: InterfaceOverrides;
+}
+
+/**
+ * DS -
+ * A full list of our UI overrides classes and structures for editors / menu buttons / etc
+ */
+interface InterfaceOverrides {
+    // Button / Dropdown specific //
+    /** ClassName given to selected elements */
+    selectedClassName?: string;
+    /** ClassName given to hidden elements */
+    hiddenClassName?: string;
+    /** The list of classes added to each Menu Button */
+    buttonClassList?: string[];
+    // Plugin Holder //
+    pluginClassList?: string[];
+    // Menu Holder //
+    menuClassList?: string[];
+    // Markdown Editor Switch //
+    editorSwitchClassList?: string[];
+    editorSwitchHtml?: string;
 }
 
 /**
@@ -198,14 +228,20 @@ export class StacksEditor implements View {
      * plugins to render their content in a reliable manner. This area cancels mousedown events to keep the editor
      * from blurring and also handles sticking the content to the top of the editor on scroll.
      */
+    // DS - need configurable classes
     private setupPluginContainer() {
         // create an area where plugins can be placed
         this.pluginContainer = document.createElement("div");
-        this.pluginContainer.className = `py6 bg-inherit btr-sm w100 ps-sticky t0 l0 z-nav s-editor-shadow js-plugin-container ${STICKY_OBSERVER_CLASS}`;
+        this.pluginContainer.className = `s-editor-shadow js-plugin-container ${STICKY_OBSERVER_CLASS}`;
+        // Look for visual override classes otherwise use defaults
+        const pluginClassList = this.options.interfaceOverrides.pluginClassList || ['py6','bg-inherit','btr-sm','w100','ps-sticky','t0','l0','z-nav'];
+        this.pluginContainer.classList.add(...pluginClassList);
 
         // create specific area for the editor menu
         const menuTarget = document.createElement("div");
-        menuTarget.className = "grid overflow-x-auto ai-center px12 py4 pb0";
+        // Look for visual override classes otherwise use defaults
+        const menuClassList = this.options.interfaceOverrides.menuClassList || ['grid','overflow-x-auto','ai-center','px12','py4','pb0'];
+        menuTarget.classList.add(...menuClassList);
         this.pluginContainer.appendChild(menuTarget);
 
         // set the editors' menu containers to be the combo container
@@ -221,7 +257,7 @@ export class StacksEditor implements View {
 
         this.innerTarget.appendChild(this.pluginContainer);
 
-        this.createEditorSwitcher(this.options.defaultView, menuTarget);
+        this.createEditorSwitcher(this.options.defaultView, menuTarget, this.options.interfaceOverrides.editorSwitchClassList, this.options.interfaceOverrides.editorSwitchHtml);
 
         // Call `preventDefault` on all `mousedown` events in our plugin container so that the Editor
         // itself does not blur on e.g. button clicks. This does not affect other mouse events / bubbling
@@ -279,6 +315,7 @@ export class StacksEditor implements View {
         }
 
         // set up focus/blur listeners so we can style the dom to match
+        // DS - focus styles... maybe fine here
         this.backingView.editorView.props.handleDOMEvents = {
             focus: () => {
                 this.innerTarget.classList.add("bs-ring", "bc-blue-300");
@@ -303,22 +340,27 @@ export class StacksEditor implements View {
      * @param defaultItem The type that is set as the default
      * @param menuTarget The container to append the created element to
      */
-    private createEditorSwitcher(defaultItem: EditorType, menuTarget: Element) {
+    // DS - redo Markup TOGGLE
+    private createEditorSwitcher(defaultItem: EditorType, menuTarget: Element, classList?: string[], toggleMarkup?: string) {
         const checkedProp =
             defaultItem === EditorType.Commonmark ? "checked" : "";
         // TODO localization
-        const html = `<label class="grid--cell fs-caption mr4 sm:d-none" for="js-editor-toggle-${this.internalId}">Markdown</label>
-<label class="grid--cell mr4 d-none sm:d-block" for="js-editor-toggle-${this.internalId}">
-    <span class="icon-bg iconMarkdown"></span>
-</label>
-<div class="grid--cell s-editor-toggle js-editor-mode-switcher">
-    <input class="js-editor-toggle-state" id="js-editor-toggle-${this.internalId}" type="checkbox" ${checkedProp}/>
-    <label for="js-editor-toggle-${this.internalId}"></label>
-</div>`;
+        const html = `
+            <label class="grid--cell fs-caption mr4 sm:d-none" for="js-editor-toggle-${this.internalId}">Markdown</label>
+            <label class="grid--cell mr4 d-none sm:d-block" for="js-editor-toggle-${this.internalId}">
+                <span class="icon-bg iconMarkdown"></span>
+            </label>
+            <div class="grid--cell s-editor-toggle js-editor-mode-switcher">
+                <input class="js-editor-toggle-state" id="js-editor-toggle-${this.internalId}" type="checkbox" ${checkedProp}/>
+                <label for="js-editor-toggle-${this.internalId}"></label>
+            </div>
+        `;
 
         const container = document.createElement("div");
-        container.className = "grid--cell grid ai-center ml24 fc-medium";
-        container.innerHTML = html;
+        const editorToggleClassList = classList || ['grid--cell', 'grid', 'ai-center', 'ml24', 'fc-medium'];
+        container.classList.add(...editorToggleClassList);
+        
+        container.innerHTML = toggleMarkup.replace(/{{id}}/g, this.internalId) || html;
         container.title = "Toggle Markdown editing";
 
         container

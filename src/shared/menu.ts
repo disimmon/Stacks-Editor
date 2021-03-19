@@ -3,6 +3,8 @@ import { EditorView } from "prosemirror-view";
 import type { PluginView } from "./view";
 import { docChanged } from "./utils";
 
+// DS - KEY UI File
+
 /** NoOp to use in place of missing commands */
 const commandNoOp = () => false;
 
@@ -12,12 +14,14 @@ class MenuView implements PluginView {
     protected menuCommands: MenuCommandEntry[];
     protected view: EditorView;
     protected readonly: boolean;
+    protected classList: string[];
 
     static disabledClass = "is-disabled";
 
-    constructor(items: MenuCommandEntry[], view: EditorView) {
+    constructor(items: MenuCommandEntry[], view: EditorView, classList?: string[], menuOverrides?: string[]) {
         this.items = items;
         this.view = view;
+        this.classList = classList || ['grid', 'gs2', 'mln4', 'fl1', 'ai-center']; 
 
         // turn all menu commands into a flat list so we can easily look them up later
         this.menuCommands = ([] as MenuCommandEntry[]).concat(
@@ -31,7 +35,10 @@ class MenuView implements PluginView {
         );
 
         this.dom = document.createElement("div");
-        this.dom.className = "grid gs2 mln4 fl1 ai-center js-editor-menu";
+
+        this.dom.className = `js-editor-menu`; // DS - Removal
+        this.dom.classList.add(...this.classList);
+
         this.items.forEach(({ dom }) => this.dom.appendChild(dom));
 
         this.update(view, null);
@@ -81,7 +88,8 @@ class MenuView implements PluginView {
         this.dom.classList.toggle("pe-none", this.readonly);
 
         const viewIsReadonly = this.readonly;
-        const activeClass = "is-selected";
+        // DS - Added
+        const activeClass = "is-primary";
         const invisibleClass = "d-none";
         const disabledClass = MenuView.disabledClass;
 
@@ -155,6 +163,9 @@ export interface MenuCommandEntry {
 
     // if this menu entry is a dropdown menu, it will have child items containing the actual commands
     children?: MenuCommandEntry[];
+
+    // DS - can we do this
+    classList?: string[]
 }
 
 /**
@@ -172,14 +183,15 @@ export function addIf(item: MenuCommandEntry, flag: boolean): MenuCommandEntry {
  */
 export function createMenuPlugin(
     items: MenuCommandEntry[],
-    containerFn: (view: EditorView) => Node
+    containerFn: (view: EditorView) => Node,
+    classList?: string[]
 ): Plugin {
     // remove all empty / falsy items
     const validItems = items.filter((i) => !!i);
 
     return new Plugin({
         view(editorView) {
-            const menuView = new MenuView(validItems, editorView);
+            const menuView = new MenuView(validItems, editorView, classList);
             containerFn =
                 containerFn ||
                 function (v) {
@@ -215,7 +227,7 @@ export function makeMenuIcon(
     cssClasses?: string[]
 ): HTMLButtonElement {
     const button = document.createElement("button");
-    button.className = `s-editor-btn grid--cell js-editor-btn js-${key}`;
+    button.className = `js-editor-btn js-${key}`;
 
     if (cssClasses) {
         button.classList.add(...cssClasses);
@@ -227,11 +239,21 @@ export function makeMenuIcon(
     button.dataset.key = key;
     button.type = "button";
 
-    // create the svg icon-bg element
-    const icon = document.createElement("span");
-    icon.className = "icon-bg icon" + iconName;
+    // // create the svg icon-bg element
+    // const icon = document.createElement("span");
+    // icon.className = "icon-bg icon" + iconName;
 
-    button.append(icon);
+    // button.append(icon);
+
+    // DS - Docs way : What's a happy medium here?
+    const content = `		
+    <span class="visually-hidden">${title}</span>
+    <span class="icon">
+        <span class="docon docon-like ${iconName}" aria-hidden="true"></span>
+    </span>
+    `
+
+    button.innerHTML = content;
 
     return button;
 }
@@ -244,7 +266,7 @@ export function makeMenuSpacerEntry(
     cssClasses?: string[]
 ): MenuCommandEntry {
     const dom = document.createElement("div");
-    dom.className = "grid--cell w16";
+    //DS - dom.className = "grid--cell w16";
 
     if (cssClasses) {
         dom.classList.add(...cssClasses);
@@ -267,6 +289,7 @@ export function makeMenuSpacerEntry(
  * @param visible A function that determines wether the dropdown should be visible or hidden
  * @param children The child MenuComandEntry items to be placed in the dropdown menu
  */
+// DS - work with this? Class overrides?
 export function makeMenuDropdown(
     svg: string,
     title: string,
@@ -318,6 +341,7 @@ export function makeMenuDropdown(
  * @param command The command to be executed when this item is clicked
  * @param key A unique identifier used for identifying the command to be executed on click
  */
+// DS - ClassList override
 export function dropdownItem(
     title: string,
     command: MenuCommand,
@@ -342,6 +366,7 @@ export function dropdownItem(
  * @param title The text to be displayed for this item
  * @param key A unique identifier used for identifying the command to be executed on click
  */
+// DS - ClassList override
 export function dropdownSection(title: string, key: string): MenuCommandEntry {
     const section = document.createElement("span");
     section.className = `grid--cell ta-left fs-fine tt-uppercase mx12 mb6 mt12 fc-black-400`;
@@ -363,6 +388,7 @@ export function dropdownSection(title: string, key: string): MenuCommandEntry {
  * @param title The text to place in the link's title attribute
  * @param href The href to open when clicked
  */
+// DS - ClassList override
 export function makeMenuLinkEntry(
     iconName: string,
     title: string,

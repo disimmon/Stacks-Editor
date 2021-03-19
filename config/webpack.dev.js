@@ -4,14 +4,14 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const fs = require("fs");
 
 module.exports = (env, argv) => {
-    // create an html page for every item in ./site/variants
-    const pageVariantPlugins = fs.readdirSync("./site/variants").map(
-        (f) =>
-            new HtmlWebpackPlugin({
-                template: "./site/variants/" + f,
-                filename: f,
-            })
-    );
+    // // create an html page for every item in ./site/variants
+    // const pageVariantPlugins = fs.readdirSync("./site/variants").map(
+    //     (f) =>
+    //         new HtmlWebpackPlugin({
+    //             template: "./site/variants/" + f,
+    //             filename: f,
+    //         })
+    // );
 
     // add --mode=production to flip this into a pseudo-production server
     const emulateProdServer = argv.mode === "production";
@@ -39,7 +39,7 @@ module.exports = (env, argv) => {
             new HtmlWebpackPlugin({
                 template: "./site/index.html",
             }),
-            ...pageVariantPlugins,
+            // ...pageVariantPlugins,
         ],
         optimization: {
             splitChunks: {

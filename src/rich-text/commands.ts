@@ -590,31 +590,32 @@ function markActive(mark: MarkType) {
     };
 }
 
+// DS - UI
 export const createMenu = (options: CommonViewOptions): Plugin =>
     createMenuPlugin(
         [
             {
                 key: "toggleHeading",
                 command: toggleBlockType(schema.nodes.heading, { level: 1 }),
-                dom: makeMenuIcon("Header", "Heading", "heading-btn"),
+                dom: makeMenuIcon("Header", "Heading", "heading-btn", ["button"]),
                 active: nodeTypeActive(schema.nodes.heading),
             },
             {
                 key: "toggleBold",
                 command: toggleMark(schema.marks.strong),
-                dom: makeMenuIcon("Bold", "Bold", "bold-btn"),
+                dom: makeMenuIcon("Bold", "Bold", "bold-btn", ["button"]),
                 active: markActive(schema.marks.strong),
             },
             {
                 key: "toggleEmphasis",
                 command: toggleMark(schema.marks.em),
-                dom: makeMenuIcon("Italic", "Italic", "italic-btn"),
+                dom: makeMenuIcon("Italic", "Italic", "italic-btn", ["button"]),
                 active: markActive(schema.marks.em),
             },
             {
                 key: "toggleCode",
                 command: toggleMark(schema.marks.code),
-                dom: makeMenuIcon("Code", "Inline code", "code-btn"),
+                dom: makeMenuIcon("Code", "Inline code", "code-btn", ["button"]),
                 active: markActive(schema.marks.code),
             },
             addIf(
@@ -624,7 +625,8 @@ export const createMenu = (options: CommonViewOptions): Plugin =>
                     dom: makeMenuIcon(
                         "Strikethrough",
                         "Strikethrough",
-                        "strike-btn"
+                        "strike-btn",
+                        ["button"]
                     ),
                     active: markActive(schema.marks.strike),
                 },
@@ -634,18 +636,18 @@ export const createMenu = (options: CommonViewOptions): Plugin =>
             {
                 key: "toggleLink",
                 command: insertLinkCommand,
-                dom: makeMenuIcon("Link", "Link selection", "insert-link-btn"),
+                dom: makeMenuIcon("Link", "Link selection", "insert-link-btn", ["button"]),
             },
             {
                 key: "toggleBlockquote",
                 command: toggleWrapIn(schema.nodes.blockquote),
-                dom: makeMenuIcon("Quote", "Blockquote", "blockquote-btn"),
+                dom: makeMenuIcon("Quote", "Blockquote", "blockquote-btn", ["button"]),
                 active: nodeTypeActive(schema.nodes.blockquote),
             },
             {
                 key: "toggleCodeblock",
                 command: toggleBlockType(schema.nodes.code_block),
-                dom: makeMenuIcon("Codeblock", "Code block", "code-block-btn"),
+                dom: makeMenuIcon("Codeblock", "Code block", "code-block-btn", ["button"]),
                 active: nodeTypeActive(schema.nodes.code_block),
             },
             addIf(
@@ -655,7 +657,8 @@ export const createMenu = (options: CommonViewOptions): Plugin =>
                     dom: makeMenuIcon(
                         "Image",
                         "Image",
-                        "insert-image-btn"
+                        "insert-image-btn",
+                        ["button"]
                     ),
                 },
                 !!options.imageUpload?.handler
@@ -682,7 +685,7 @@ export const createMenu = (options: CommonViewOptions): Plugin =>
                     "OrderedList",
                     "Numbered list",
                     "numbered-list-btn"
-                ),
+                , ["button"]),
                 active: nodeTypeActive(schema.nodes.ordered_list),
             },
             {
@@ -691,7 +694,8 @@ export const createMenu = (options: CommonViewOptions): Plugin =>
                 dom: makeMenuIcon(
                     "UnorderedList",
                     "Bulleted list",
-                    "bullet-list-btn"
+                    "bullet-list-btn",
+                    ["button"]
                 ),
                 active: nodeTypeActive(schema.nodes.bullet_list),
             },
@@ -701,31 +705,30 @@ export const createMenu = (options: CommonViewOptions): Plugin =>
                 dom: makeMenuIcon(
                     "HorizontalRule",
                     "Horizontal rule",
-                    "horizontal-rule-btn"
+                    "horizontal-rule-btn",
+                    ["button"]
                 ),
             },
-            makeMenuSpacerEntry(() => false, ["sm:d-inline-block"]),
+            //DS - Remove
+            makeMenuSpacerEntry(() => false, ["zzz"]),
             {
                 key: "undo",
                 command: undo,
-                dom: makeMenuIcon("Undo", "Undo", "undo-btn", [
-                    "sm:d-inline-block",
-                ]),
+                dom: makeMenuIcon("Undo", "Undo", "undo-btn", ["button"]),
                 visible: () => false,
             },
             {
                 key: "redo",
                 command: redo,
-                dom: makeMenuIcon("Refresh", "Redo", "redo-btn", [
-                    "sm:d-inline-block",
-                ]),
+                dom: makeMenuIcon("Refresh", "Redo", "redo-btn", ["button"]),
                 visible: () => false,
             },
             makeMenuSpacerEntry(),
             //TODO eventually this will mimic the "help" dropdown in the prod editor
             makeMenuLinkEntry("Help", "Help", options.editorHelpLink),
         ],
-        options.menuParentContainer
+        options.menuParentContainer,
+        options.menuClassList
     );
 
 const tableDropdown = makeMenuDropdown(

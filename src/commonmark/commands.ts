@@ -670,6 +670,7 @@ export function insertImageCommand(
     return true;
 }
 
+// DS - UI
 export const createMenu = (options: CommonViewOptions): Plugin =>
     createMenuPlugin(
         [
@@ -697,11 +698,7 @@ export const createMenu = (options: CommonViewOptions): Plugin =>
                 {
                     key: "toggleStrikethrough",
                     command: strikethroughCommand,
-                    dom: makeMenuIcon(
-                        "Strikethrough",
-                        "Strikethrough",
-                        "strike-btn"
-                    ),
+                    dom: makeMenuIcon("Strikethrough", "Strikethrough", "strike-btn"),
                 },
                 options.parserFeatures.extraEmphasis
             ),
@@ -798,5 +795,6 @@ export const createMenu = (options: CommonViewOptions): Plugin =>
             //TODO eventually this will mimic the "help" dropdown in the prod editor
             makeMenuLinkEntry("Help", "Help", options.editorHelpLink),
         ],
-        options.menuParentContainer
+        options.menuParentContainer,
+        options.menuClassList
     );
